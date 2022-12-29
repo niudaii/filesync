@@ -32,12 +32,12 @@ var serverCmd = &cobra.Command{
 }
 
 func StartFileSyncServer(host, port, auth, dir string, blackList []string) {
-	log.Printf("启动文件同步server: %v:%v", host, port)
+	log.Printf("启动文件同步server: %v:%v\n", host, port)
 	filesync.StartFileSyncServer(host, port, auth, dir, blackList)
 }
 
 func StartFileMonitor(dir string) {
-	log.Print("启动文件监控")
+	log.Println("启动文件监控")
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
