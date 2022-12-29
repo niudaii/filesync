@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/niudaii/filesync/pkg/filesync"
-	"github.com/projectdiscovery/gologger"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 	"time"
 )
@@ -26,8 +25,8 @@ var workerCmd = &cobra.Command{
 	},
 }
 
-func pathExists(foldername string) bool {
-	info, err := os.Stat(foldername)
+func pathExists(path string) bool {
+	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return false
 	}
@@ -38,21 +37,17 @@ func pathExists(foldername string) bool {
 }
 
 func StartFileSyncWorker(host, port, auth, dir string, timer int) {
-	gologger.Info().Msgf("启动文件同步worker")
+	log.Println("启动文件同步worker")
 	if ok := pathExists(dir); !ok { // 判断是否有Director文件夹
 		_ = os.Mkdir(dir, os.ModePerm)
 	}
-	var err error
-	if timer == 0 {
-		if err = filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
-			fmt.Println(err)
+	for {
+		if err := filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
+			log.Println(err)
 		}
-	} else {
-		for {
-			if err = filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
-				fmt.Println(err)
-			}
-			time.Sleep(time.Duration(timer) * time.Second)
+		if timer == 0 {
+			break
 		}
+		time.Sleep(time.Duration(timer) * time.Second)
 	}
 }

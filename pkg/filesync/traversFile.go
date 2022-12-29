@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -17,7 +18,7 @@ func init() {
 	var err error
 	cwd, err = os.Getwd()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 }
 

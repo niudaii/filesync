@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/gob"
 	"fmt"
-	"github.com/projectdiscovery/gologger"
+	"log"
 	"net"
 	"os"
 	"path/filepath"
@@ -43,14 +43,13 @@ func StartFileSyncServer(host, port, auth, dir string, blackList []string) {
 	serverAddr := fmt.Sprintf("%s:%s", host, port)
 	srv, err := net.Listen("tcp", serverAddr)
 	if err != nil {
-		gologger.Error().Msgf("net.Listen() err", err)
-		return
+		log.Fatal("net.Listen() err", err)
 	}
 	var conn net.Conn
 	for {
 		conn, err = srv.Accept()
 		if err != nil {
-			gologger.Error().Msgf("srv.Accept() err", err)
+			log.Println("srv.Accept() err", err)
 			continue
 		}
 		go handleSync(conn, auth, dir)
@@ -76,12 +75,12 @@ func handleSync(conn net.Conn, auth, dir string) {
 		// 请求同步
 		case MsgSync:
 			if err = hdSync(gbc, dir); err != nil {
-				gologger.Error().Msgf("hdSync() err", err)
+				log.Println("hdSync() err", err)
 			}
 		// 请求文件传输
 		case MsgTran:
 			if err = hdTranFile(&mg, gbc, dir); err != nil {
-				gologger.Error().Msgf("hdTranFile() err", err)
+				log.Println("hdTranFile() err", err)
 			}
 		// 结束
 		case MsgEnd:
@@ -157,7 +156,7 @@ func writeErrorMg(message string, gbc *GobConn) {
 	errMsg.MgType = MsgError
 	errMsg.MgString = message
 	if err := gbc.gobConnWt(errMsg); err != nil {
-		gologger.Error().Msgf("gbc.gobConnWt() err", err)
+		log.Println("gbc.gobConnWt() err", err)
 	}
 }
 

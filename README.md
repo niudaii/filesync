@@ -1,11 +1,11 @@
 # filesync
-filesync demo.
+#### 使用
 
 ```
-./main server --host 0.0.0.0 --dir resource
+./filesync server --host 0.0.0.0 --dir resource --black webscan
 ```
 
 ```
-./main worker --host 127.0.0.1 --dir resource2
+./filesync worker --host xxx.xxx.xxx.xxx --dir resource
 ```
 

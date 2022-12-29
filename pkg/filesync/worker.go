@@ -3,7 +3,7 @@ package filesync
 import (
 	"fmt"
 	"github.com/jacenr/filediff/diff"
-	"github.com/projectdiscovery/gologger"
+	"log"
 	"net"
 	"os"
 	"path/filepath"
@@ -43,17 +43,17 @@ func WorkerStartupSync(host, port, auth, dir string) (err error) {
 	transFiles, err = doFileMd5List(&hostMessage, dir)
 	if err == nil {
 		if len(transFiles) > 0 {
-			gologger.Info().Msgf("需要同步的文件数量: %d", len(transFiles))
+			log.Printf("需要同步的文件数量: %v\n", len(transFiles))
 			// 5 同步文件
 			for i, file := range transFiles {
 				err = doTranFile(file, auth, gbc, dir)
 				if err != nil {
-					gologger.Info().Msgf("%d %s 同步失败", i+1, file)
+					log.Printf("%v %v 同步失败\n", i+1, file)
 				} else {
-					gologger.Info().Msgf("%d %s 同步成功", i+1, file)
+					log.Printf("%v %v 同步成功\n", i+1, file)
 				}
 			}
-			gologger.Info().Msgf("同步完成")
+			log.Println("同步完成")
 		}
 	}
 	// 6 结束同步
