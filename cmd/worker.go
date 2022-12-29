@@ -21,23 +21,23 @@ var workerCmd = &cobra.Command{
 	Use:   "worker",
 	Short: "文件同步客户端",
 	Run: func(cmd *cobra.Command, args []string) {
-		if timer == 0 {
-			if err := filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
-				fmt.Println(err)
-			}
-		} else {
-			startFileSyncWorker(host, port, auth, dir, timer)
-		}
+		StartFileSyncWorker(host, port, auth, dir, timer)
 	},
 }
 
-func startFileSyncWorker(host, port, auth, dir string, timer int) {
+func StartFileSyncWorker(host, port, auth, dir string, timer int) {
 	gologger.Info().Msgf("启动文件同步worker")
 	var err error
-	for {
+	if timer == 0 {
 		if err = filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
 			fmt.Println(err)
 		}
-		time.Sleep(time.Duration(timer) * time.Second)
+	} else {
+		for {
+			if err = filesync.WorkerStartupSync(host, port, auth, dir); err != nil {
+				fmt.Println(err)
+			}
+			time.Sleep(time.Duration(timer) * time.Second)
+		}
 	}
 }

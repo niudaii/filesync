@@ -20,11 +20,11 @@ var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "文件同步服务端",
 	Run: func(cmd *cobra.Command, args []string) {
-		startFileSyncServer(host, port, auth, dir, blackList)
+		StartFileSyncServer(host, port, auth, dir, blackList)
 	},
 }
 
-func startFileSyncServer(host, port, auth, dir string, blackList []string) {
+func StartFileSyncServer(host, port, auth, dir string, blackList []string) {
 	gologger.Info().Msgf("启动文件同步server: %v", fmt.Sprintf("%v:%v", host, port))
 	filesync.StartFileSyncServer(host, port, auth, dir, blackList)
 }
