@@ -51,7 +51,7 @@ func Traverse(path string) ([]string, error) {
 		if runtime.GOOS == "windows" {
 			path = strings.ReplaceAll(path, "\\", "/")
 		}
-		if checkFileIsSyncList(path) == false {
+		if !checkFileIsSyncList(path) {
 			return nil
 		}
 		if info.IsDir() {
@@ -106,7 +106,7 @@ func Md5OfAFile(f string) (string, error) {
 	var e error
 	for {
 		s, e = r.ReadString('\n')
-		io.WriteString(h, s)
+		_, _ = io.WriteString(h, s)
 		if e != nil {
 			if e == io.EOF {
 				break

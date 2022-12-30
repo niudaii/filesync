@@ -162,8 +162,5 @@ func writeErrorMg(message string, gbc *GobConn) {
 
 // checkSyncAuthKey 同步的认证检查
 func checkSyncAuthKey(authKey, workerAuthKey string) (success bool) {
-	if workerAuthKey == authKey {
-		return true
-	}
-	return false
+	return workerAuthKey == authKey
 }
