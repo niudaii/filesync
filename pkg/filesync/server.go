@@ -156,7 +156,7 @@ func writeErrorMg(message string, gbc *GobConn) {
 	errMsg.MgType = MsgError
 	errMsg.MgString = message
 	if err := gbc.gobConnWt(errMsg); err != nil {
-		log.Println("gbc.gobConnWt() err", err)
+		log.Println(err)
 	}
 }
 
